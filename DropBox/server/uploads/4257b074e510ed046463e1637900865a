@@ -1,0 +1,62 @@
+import java.util.Scanner;
+
+class CeaserCipher{
+    public final String letters="abcdefghijklmnopqrstuvwxyz";
+    public String encryption(String text,int key){
+        text=text.toLowerCase();
+        int length=text.length();
+        String cipherText= new String();
+        for(int i=0;i<length;i++){
+            char currentChar=text.charAt(i);
+            int position = letters.indexOf(currentChar);
+            if(position ==-1){
+                cipherText+=currentChar;
+                continue;
+            }
+            int newpos=(position+key)%26;
+            cipherText+=letters.charAt(newpos);
+        }
+
+        return cipherText;
+    }
+    public String decryption(String text,int key){
+        text=text.toLowerCase();
+        int length=text.length();
+        String plainText= new String();
+        for(int i=0;i<length;i++){
+            char currentChar=text.charAt(i);
+            int position = letters.indexOf(currentChar);
+            if(position ==-1){
+                plainText+=currentChar;
+                continue;
+            }
+            int newpos=((position-key)%26+26)%26;
+            plainText+=letters.charAt(newpos);
+        }
+
+        return plainText;
+    }
+
+}
+public class ccprac {
+    public static void main(String args[])
+    {
+        System.out.println("Welcome to the world of mark-antony");
+        try(Scanner sc = new Scanner(System.in)){
+                CeaserCipher cc = new CeaserCipher();
+                System.out.print("Enter your Name:");
+                String name = sc.nextLine();
+                System.out.print("Enter the key: ");
+                int key = sc.nextInt();
+                String cipherText = cc.encryption(name, key);
+                System.out.println("CipherText: "+ cipherText);
+                String plainText = cc.decryption(cipherText, key);
+                System.out.println("Plain Text: " + plainText);
+
+        }
+        catch(Exception e)
+        {
+            System.out.print("Error Occured ->");
+        }
+    }
+}
