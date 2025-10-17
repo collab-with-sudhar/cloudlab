@@ -53,8 +53,36 @@ edit hdfs-site.xml
     </configuration>
 
 edit mapred-site.xml
-edit yarn-site.xml
 
+<configuration>
+<property>
+<name>mapreduce.framework.name</name>
+<value>yarn</value>
+</property>
+<property>
+<name>yarn.app.mapreduce.am.env</name>
+<value>HADOOP_MAPRED_HOME=/home/hadoouser/hadoop</value>
+</property>
+<property>
+<name>mapreduce.map.env</name>
+<value>HADOOP_MAPRED_HOME=/home/hadoouser/hadoop</value>
+</property>
+<property>
+<name>mapreduce.reduce.env</name>
+<value>HADOOP_MAPRED_HOME=/home/hadoouser/hadoop</value>
+</property>
+</configuration>
+edit yarn-site.xml
+<configuration>
+<property>
+<name>yarn.nodemanager.aux-services</name>
+<value>mapreduce_shuffle</value>
+</property>
+<property>
+<name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+<value>org.apache.hadoop.mapred.ShuffleHandler</value>
+</property>
+</configuration>
 mkdir -p {namenode,datanode}
 
 hdfs namenode -format
