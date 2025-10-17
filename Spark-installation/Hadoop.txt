@@ -1,0 +1,74 @@
+sudo apt-get install openjdk-11-jdk
+java -version
+wget https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+tar -xvzf hadoop-3.3.6.tar.gz
+mv hadoop-3.3.6 hadoop
+nano ~/.bashrc
+    export HADOOP_HOME=/home/sudhar/hadoop
+    export HADOOP_INSTALL=$HADOOP_HOME
+    export HADOOP_MAPRED_HOME=$HADOOP_HOME
+    export HADOOP_COMMON_HOME=$HADOOP_HOME
+    export HADOOP_HDFS_HOME=$HADOOP_HOME
+    export YARN_HOME=$HADOOP_HOME
+    export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+    export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+    export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+source ~/.bashrc
+
+readlink -f $(which java)
+nano hadoop/etc/hadoop/hadoop-env.sh 
+    export JAVA_HOME=/usr/lib/openjdk-8-amd64
+
+ssh-keygen rsa -t ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 640 ~/.shh/authorized_keys
+ssh localhost
+
+edit core-site.xml
+    <configuration>
+        <property>
+            <name>fs.default.name</name>
+            <value>hdfs://127.0.0.1:9000</value>
+        </property>
+        <property>
+            <name>hadoop.tmp.dir</name>
+            <value>/home/sudhar/tmpdata</value>
+        </property>
+    </configuration>
+
+edit hdfs-site.xml
+    <configuration>
+        <property>
+            <name>dfs.data.dir</name>
+            <value>/home/sudhar/dfsdata/namenode</value>
+        </property>
+        <property>
+        <name>dfs.data.dir</name>
+        <value>/home/akilankm/dfsdata/datanode</value>
+        </property>
+        <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+        </property>
+    </configuration>
+
+edit mapred-site.xml
+edit yarn-site.xml
+
+mkdir -p {namenode,datanode}
+
+hdfs namenode -format
+
+./start-dfs.sh
+./start-yarn.sh
+
+jps
+
+./start-all
+localhost:9870
+localhost:8088
+
+hdfs dfs -mkdir -p /home/sudhar/input
+hdfs dfs -put inp.txt /home/sudhar/input
+
+hadoop jar $HADOOP_HOME/loc wordcount /input /output
